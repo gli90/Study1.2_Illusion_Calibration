@@ -41,9 +41,9 @@ can be manipulated independently.
 
 
 
-# Stimulus Design
+## Stimulus Design
 
-## Center Colors
+### Center Colors
 
 The central patches vary along a calibrated blue–purple color axis (D2 axis).
 
@@ -63,7 +63,7 @@ Large categorical jumps are avoided.
 
 
 
-## Surround Colors
+### Surround Colors
 
 Two large chromatic surrounds are presented:
 
@@ -83,11 +83,11 @@ Pilot testing indicated that this red–green surround pair produces the stronge
 
 
 
-# Experimental Procedure
+## Experimental Procedure
 
 Each trial contains:
 
-## 1. Fixation
+### 1. Fixation
 
 A central fixation cross is presented.
 
@@ -97,7 +97,7 @@ Duration:
 
 
 
-## 2. Matching Phase
+### 2. Matching Phase
 
 Two center patches are shown simultaneously.
 
@@ -117,7 +117,7 @@ Make both center patches appear identical.
 
 
 
-## 3. Response
+### 3. Response
 
 Press:
 
@@ -129,7 +129,7 @@ Reaction time is recorded.
 
 
 
-## 4. Inter-Trial Interval (ISI)
+### 4. Inter-Trial Interval (ISI)
 
 Fixation cross only.
 
@@ -141,7 +141,7 @@ to reduce adaptation and carry-over effects.
 
 
 
-# Multi-Anchor Design
+## Multi-Anchor Design
 
 Instead of using a single center color, task_b_ver.1.0 samples multiple locations along the blue-purple axis.
 
@@ -157,7 +157,7 @@ This allows estimation of illusion strength across the color continuum rather th
 
 
 
-# Trial Structure
+## Trial Structure
 
 Current version:
 
@@ -189,7 +189,7 @@ This minimizes anchoring effects.
 
 
 
-# Mouse-Controlled Adjustment
+## Mouse-Controlled Adjustment
 
 The comparison patch is controlled continuously using horizontal mouse movement.
 
@@ -208,7 +208,7 @@ The marker reflects the current adjustment position.
 
 
 
-# Recorded Variables
+## Recorded Variables
 
 For each trial:
 
@@ -240,7 +240,7 @@ Reaction time in seconds.
 
 
 
-# Outcome Measure
+## Outcome Measure
 
 Participant-specific illusion magnitude:
 
@@ -261,7 +261,7 @@ Reliability across sessions.
 
 
 
-# Expected Result
+## Expected Result
 
 If the surround manipulation is effective:
 
@@ -273,7 +273,7 @@ This value serves as the participant’s illusion calibration parameter for subs
 
 
 
-# Future Integration
+## Future Integration
 
 Task B provides:
 
