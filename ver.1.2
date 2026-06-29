@@ -1,0 +1,421 @@
+from psychopy import visual, core, event, gui
+from psychopy.hardware import keyboard
+import numpy as np
+import pandas as pd
+import random
+
+# =====================================================
+# Participant Info
+# =====================================================
+
+info = {
+    "Participant": "",
+    "Age": "",
+    "Gender": ""
+}
+
+dlg = gui.DlgFromDict(
+    info,
+    title="Task B - Illusion Calibration"
+)
+
+if not dlg.OK:
+    core.quit()
+
+# =====================================================
+# Window
+# =====================================================
+
+win = visual.Window(
+    units='pix',
+    color=(0,0,0),
+    fullscr=True
+)
+
+kb = keyboard.Keyboard()
+
+# =====================================================
+# LAB -> RGB
+# =====================================================
+
+def lab_to_rgb(L,a,b):
+
+    fy = (L+16)/116
+    fx = fy + a/500
+    fz = fy - b/200
+
+    eps = 0.008856
+    kap = 903.3
+
+    xyz = []
+
+    for f in [fx,fy,fz]:
+
+        if f**3 > eps:
+            xyz.append(f**3)
+        else:
+            xyz.append((116*f-16)/kap)
+
+    Xn = 95.047
+    Yn = 100.0
+    Zn = 108.883
+
+    X = xyz[0]*Xn
+    Y = xyz[1]*Yn
+    Z = xyz[2]*Zn
+
+    X /= 100
+    Y /= 100
+    Z /= 100
+
+    r = 3.2406*X -1.5372*Y -0.4986*Z
+    g = -0.9689*X +1.8758*Y +0.0415*Z
+    bb = 0.0557*X -0.2040*Y +1.0570*Z
+
+    rgb = np.array([r,g,bb])
+
+    rgb = np.where(
+        rgb > 0.0031308,
+        1.055*np.power(rgb,1/2.4)-0.055,
+        12.92*rgb
+    )
+
+    rgb = np.clip(rgb,0,1)
+
+    return rgb
+
+# =====================================================
+# D2 AXIS
+# =====================================================
+
+LSTAR = 75
+
+ANCHORS = [
+    np.array([4.0,-29.0]),
+    np.array([5.0,-28.0]),
+    np.array([6.0,-27.0]),
+    np.array([7.0,-26.0]),
+    np.array([8.0,-25.0])
+]
+
+START = np.array([5,-27.5])
+END   = np.array([8,-24.5])
+
+v = END - START
+v = v / np.linalg.norm(v)
+
+# =====================================================
+# SURROUNDS
+# =====================================================
+
+LEFT_SURROUND  = np.array([-60,25])
+RIGHT_SURROUND = np.array([60,25])
+
+# =====================================================
+# Layout
+# =====================================================
+
+surround_size = 420
+center_size = 50
+
+LEFT_POS  = (-500,0)
+RIGHT_POS = (500,0)
+
+# =====================================================
+# Stimuli
+# =====================================================
+
+mouse = event.Mouse(win=win)
+
+left_surround = visual.Rect(
+    win,
+    width=surround_size,
+    height=surround_size,
+    pos=LEFT_POS,
+    lineColor=None
+)
+
+right_surround = visual.Rect(
+    win,
+    width=surround_size,
+    height=surround_size,
+    pos=RIGHT_POS,
+    lineColor=None
+)
+
+left_center = visual.Rect(
+    win,
+    width=center_size,
+    height=center_size,
+    pos=LEFT_POS,
+    lineColor=None
+)
+
+right_center = visual.Rect(
+    win,
+    width=center_size,
+    height=center_size,
+    pos=RIGHT_POS,
+    lineColor=None
+)
+
+fixation = visual.TextStim(
+    win,
+    text="+",
+    color="white",
+    height=36
+)
+
+slider_line = visual.Line(
+    win,
+    start=(-300,-330),
+    end=(300,-330),
+    lineColor="white"
+)
+
+slider_dot = visual.Circle(
+    win,
+    radius=8,
+    fillColor="white",
+    lineColor="white"
+)
+
+slider_left = visual.TextStim(
+    win,
+    text="Blue",
+    pos=(-360,-330),
+    color="white",
+    height=18
+)
+
+slider_right = visual.TextStim(
+    win,
+    text="Purple",
+    pos=(360,-330),
+    color="white",
+    height=18
+)
+
+# =====================================================
+# Constant Colors
+# =====================================================
+
+left_sur_rgb = lab_to_rgb(
+    LSTAR,
+    LEFT_SURROUND[0],
+    LEFT_SURROUND[1]
+)
+
+right_sur_rgb = lab_to_rgb(
+    LSTAR,
+    RIGHT_SURROUND[0],
+    RIGHT_SURROUND[1]
+)
+
+left_surround.fillColor = left_sur_rgb*2-1
+right_surround.fillColor = right_sur_rgb*2-1
+
+# =====================================================
+# Instructions
+# =====================================================
+
+instruction = visual.TextStim(
+    win,
+    text="""
+TASK B
+
+Adjust the RIGHT center patch
+until both center patches appear identical.
+
+A = more bluish
+L = more purplish
+
+SPACE = confirm
+
+Press SPACE to begin
+""",
+    color='white',
+    height=28
+)
+
+instruction.draw()
+win.flip()
+
+event.waitKeys(keyList=['space'])
+
+# =====================================================
+# Trials
+# =====================================================
+
+trials = []
+
+for i, anchor in enumerate(ANCHORS):
+    for _ in range(8):
+        trials.append((i + 1, anchor))
+
+random.shuffle(trials)
+
+N_TRIALS = len(trials)
+
+results = []
+
+for trial_index, (anchor_id, anchor) in enumerate(trials):
+
+    start_offset = random.choice(
+        [-8,-6,-4,-2,2,4,6,8]
+    )
+
+    mouse.setPos(
+        (start_offset * 40, 0)
+    )
+
+    fixation.draw()
+    win.flip()
+    core.wait(
+    random.uniform(1.0,1.5)
+)
+
+    trial_clock = core.Clock()
+
+    while True:
+
+        x, y = mouse.getPos()
+
+        offset = np.clip(
+            x / 40,
+            -20,
+            20
+        )
+
+        comparison = anchor + offset * v
+
+        center_rgb = lab_to_rgb(
+            LSTAR,
+            anchor[0],
+            anchor[1]
+        )
+
+        comp_rgb = lab_to_rgb(
+            LSTAR,
+            comparison[0],
+            comparison[1]
+        )
+
+        left_center.fillColor = center_rgb * 2 - 1
+        right_center.fillColor = comp_rgb * 2 - 1
+
+        slider_dot.pos = (
+            offset * 15,
+            -330
+        )
+
+        left_surround.draw()
+        right_surround.draw()
+
+        left_center.draw()
+        right_center.draw()
+
+        fixation.draw()
+
+        slider_line.draw()
+        slider_dot.draw()
+
+        slider_left.draw()
+        slider_right.draw()
+
+        trial_text = visual.TextStim(
+            win,
+            text=f"Trial {trial_index+1}/{N_TRIALS}",
+            pos=(0,340),
+            color="white",
+            height=22
+        )
+
+        trial_text.draw()
+
+        win.flip()
+
+        keys = event.getKeys()
+
+        if 'escape' in keys:
+
+            win.close()
+
+            core.quit()
+
+        if 'space' in keys:
+
+            rt = trial_clock.getTime()
+
+            results.append({
+
+                "participant": info["Participant"],
+                "age": info["Age"],
+                "gender": info["Gender"],
+
+                "trial": trial_index + 1,
+
+                "anchor_id": anchor_id,
+
+                "anchor_a": float(anchor[0]),
+                "anchor_b": float(anchor[1]),
+
+                "start_offset": start_offset,
+
+                "final_offset": round(offset,3),
+
+                "illusion": round(offset,3),
+
+                "rt": round(rt,3)
+
+            })
+
+            break
+
+    fixation.draw()
+    win.flip()
+
+    core.wait(0.5)
+
+# =====================================================
+# Save
+# =====================================================
+
+df = pd.DataFrame(results)
+
+filename = f"{info['Participant']}_TaskB_v1.csv"
+
+df.to_csv(
+    filename,
+    index=False
+)
+
+mean_illusion = df["illusion"].mean()
+sd_illusion = df["illusion"].std()
+
+summary = visual.TextStim(
+    win,
+    text=f"""
+Finished
+
+Mean illusion = {mean_illusion:.2f}
+
+SD illusion = {sd_illusion:.2f}
+
+Saved:
+
+{filename}
+
+Press SPACE to quit
+""",
+    color='white',
+    height=28
+)
+
+summary.draw()
+win.flip()
+
+event.waitKeys(keyList=['space'])
+
+win.close()
+core.quit()
