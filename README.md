@@ -12,18 +12,13 @@ This calibration is critical for the main experiment, where physical color diffe
 The study investigates whether subjective confidence can be dissociated from objective accuracy.
 To achieve this goal, we first need to measure:
 
-Perceptual discrimination threshold (task a)
-
-Δ_threshold
-
+Perceptual discrimination threshold (task a)  
+Δ_threshold    
 Estimated using a QUEST adaptive staircase procedure.
 
-This task(b)
-
-Illusion-induced perceptual bias
-
-Δ_illusion
-
+This task(b)  
+Illusion-induced perceptual bias  
+Δ_illusion  
 Estimated using a color matching procedure.
 
 The main experiment will later combine these measurements to create stimuli in which:   
@@ -32,47 +27,34 @@ Perceived color difference
 can be manipulated independently.
 
 
-
 ## Stimulus Design
 
 ### Center Colors
 
-The central patches vary along a calibrated blue–purple color axis (D2 axis).
-
+The central patches vary along a calibrated blue–purple color axis (D2 axis).  
 Color coordinates are represented in CIELAB space:
-
-(L^*,a^*,b^*)
-
-with:
-
-L* = 75
-
-The D2 axis was selected through pilot testing because:
-
+(L*,a*,b*)  
+with:  
+L* = 75  
+The D2 axis was selected through pilot testing（candidate axis : A-D）because:  
 Blue-purple discrimination is sufficiently difficult.
 The transition is perceptually smooth.
 Large categorical jumps are avoided.
-
 
 
 ### Surround Colors
 
 Two large chromatic surrounds are presented:
 
-Left surround
-
-Green-biased
-
+Left surround  
+Green-biased  
 (-60, 25)
 
-Right surround
-
-Red-biased
-
-(60, 25)
+Right surround  
+Red-biased  
+(60, 25)  
 
 Pilot testing indicated that this red–green surround pair produces the strongest simultaneous color contrast effect among the tested combinations.
-
 
 
 ## Experimental Procedure
@@ -81,32 +63,25 @@ Each trial contains:
 
 ### 1. Fixation
 
-A central fixation cross is presented.
-
-Duration:
-
+A central fixation cross is presented.  
+Duration:  
 750 ms
-
 
 
 ### 2. Matching Phase
 
-Two center patches are shown simultaneously.
+Two center patches are shown simultaneously.  
 
-Left center:
-
+Left center:  
 Reference patch
 
-Right center:
-
+Right center:  
 Adjustable comparison patch
 
 Participants move the mouse horizontally to adjust the comparison patch along the blue-purple axis.
 
-Goal:
-
+Goal:  
 Make both center patches appear identical.
-
 
 
 ### 3. Response
@@ -115,10 +90,8 @@ Press:
 
 SPACE
 
-to confirm the match.
-
+to confirm the match.  
 Reaction time is recorded.
-
 
 
 ### 4. Inter-Trial Interval (ISI)
@@ -132,32 +105,26 @@ Random duration:
 to reduce adaptation and carry-over effects.
 
 
-
 ## Multi-Anchor Design
 
 Instead of using a single center color, task_b_ver.1.0 samples multiple locations along the blue-purple axis.
 
 Anchors:
 
-Anchor 1 = (4.0, -29.0)
-Anchor 2 = (5.0, -28.0)
-Anchor 3 = (6.0, -27.0)
-Anchor 4 = (7.0, -26.0)
+Anchor 1 = (4.0, -29.0)  
+Anchor 2 = (5.0, -28.0)  
+Anchor 3 = (6.0, -27.0)  
+Anchor 4 = (7.0, -26.0)  
 Anchor 5 = (8.0, -25.0)
 
 This allows estimation of illusion strength across the color continuum rather than at a single color point.
 
 
-
 ## Trial Structure
 
-Current version:
+Current version(ver.1.2):
 
-5 Anchors 
-×
-8 Repetitions
-=
-40 Trials
+5 Anchors x 8 Repetitions = 40 Trials
 
 Trials are randomized.
 
@@ -168,17 +135,16 @@ Initial comparison position is randomized.
 
 Starting offsets:
 
--10
--8
--6
--4
-+4
-+6
-+8
+-10  
+-8  
+-6  
+-4  
++4  
++6  
++8  
 +10
 
 This minimizes anchoring effects.
-
 
 
 ## Mouse-Controlled Adjustment
@@ -187,70 +153,58 @@ The comparison patch is controlled continuously using horizontal mouse movement.
 
 Advantages:
 
-Continuous response space.
-More natural matching behavior.
-Reduced dependence on repeated key presses.
+Continuous response space.  
+More natural matching behavior.   
+Reduced dependence on repeated key presses.  
 Higher precision than discrete button adjustment.
 
-A visual slider is displayed at the bottom of the screen:
+A visual slider is displayed at the bottom of the screen:  
 
 Blue -------- ● -------- Purple
 
 The marker reflects the current adjustment position.
 
 
-
 ## Recorded Variables
 
 For each trial:
 
-participant
-age
-gender
-trial
-anchor_id
-anchor_a
-anchor_b
-start_offset
-final_offset
-illusion
-rt
+participant  
+age  
+gender  
+trial  
+anchor_id  
+anchor_a  
+anchor_b  
+start_offset  
+final_offset  
+illusion  
+rt  
 
 Definitions:
 
-final_offset
+final_offset = final matching position chosen by the participant.
 
-Final matching position chosen by the participant.
+illusion = physical compensation required to null the perceived surround-induced color difference.
 
-illusion
-
-Physical compensation required to null the perceived surround-induced color difference.
-
-rt
-
-Reaction time in seconds.
-
+rt = reaction time in seconds.
 
 
 ## Outcome Measure
 
 Participant-specific illusion magnitude:
 
-\Delta_{illusion}
+Δ_illusion 
 
-computed as:
-
-Mean(final_offset)
-
+computed as:  
+Mean(final_offset)  
 across trials.
 
-Additional analyses may examine:
-
-Anchor-specific illusion magnitude.
-Trial-to-trial variability.
-Reaction time distributions.
-Reliability across sessions.
-
+Additional analyses may examine:  
+Anchor-specific illusion magnitude.  
+Trial-to-trial variability.  
+Reaction time distributions.  
+Reliability across sessions.  
 
 
 ## Expected Result
@@ -267,13 +221,13 @@ This value serves as the participant’s illusion calibration parameter for subs
 
 ## Future Integration
 
-Task B provides:
+This task(b) provides:
 
-\Delta_{illusion}
+Δ_illusion  
 
-Task A provides:
+Task(a) provides:
 
-\Delta_{threshold}
+Δ_threshold 
 
 The main experiment will use these measurements to construct conditions in which:
 
